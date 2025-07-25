@@ -48,7 +48,7 @@ app.post("/generate-content", async (req: Request, res: Response) => {
 
   try {
     const response = await axios.post(
-      "https://api.imagepig.com/",
+      "https://api.imagepig.com/flux",
       { prompt },
       {
         headers: {
