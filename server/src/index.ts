@@ -7,7 +7,17 @@ import fs from "fs/promises";
 import path from "path";
 
 dotenv.config();
-const prisma = new PrismaClient();
+
+// Sửa ở đây: thêm log để debug và truyền env nếu cần
+const prisma = new PrismaClient({
+  log: ["query", "info", "warn", "error"],
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL,
+    },
+  },
+});
+
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -32,9 +42,7 @@ app.post("/generate-content", async (req: Request, res: Response) => {
 
   if (!API_KEY) {
     console.error("API_KEY is missing in env");
-    res
-      .status(500)
-      .json({ error: "Internal Server Error: API_KEY not configured" });
+    res.status(500).json({ error: "Internal Server Error: API_KEY not configured" });
     return;
   }
 
@@ -51,7 +59,6 @@ app.post("/generate-content", async (req: Request, res: Response) => {
     );
 
     console.log("API Response:", response.data);
-
     const imageData = response.data.image_data;
 
     if (!imageData) {
@@ -62,6 +69,7 @@ app.post("/generate-content", async (req: Request, res: Response) => {
       return;
     }
 
+    // ✅ Nếu chưa cần lưu DB, bạn có thể comment dòng dưới đây:
     await prisma.image.create({
       data: {
         prompt,
