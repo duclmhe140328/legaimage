@@ -50,7 +50,7 @@ export function ImageGallery() {
     const isBase64 = image.imageData.startsWith("/9j") || image.imageData.startsWith("iVBOR");
     const imageUrl = isBase64
       ? `data:image/jpeg;base64,${image.imageData}`
-      : `http://localhost:5001${image.imageData}`;
+      : `https://legaimage.onrender.com${image.imageData}`;
 
     link.href = imageUrl;
     link.download = `ai-image-${image.id}.jpg`;
@@ -104,7 +104,7 @@ export function ImageGallery() {
                       />
                     ) : (
                       <img
-                        src={`http://localhost:5001${image.imageData}`}
+                        src={`https://legaimage.onrender.com${image.imageData}`}
                         alt={image.prompt}
                         className="w-full h-full object-cover"
                       />
